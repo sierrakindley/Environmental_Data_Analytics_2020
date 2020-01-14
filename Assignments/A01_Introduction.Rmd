@@ -1,6 +1,6 @@
 ---
 title: "Assignment 1: Introduction"
-author: "Student Name"
+author: Sierra Kindley
 output: pdf_document
 geometry: margin=2.54cm
 ---
@@ -22,21 +22,21 @@ The completed exercise is due on Tuesday, January 14th at 1:00 pm.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: I have no prior experience with Git. However, I do have experience with R and data analytics. I used both pretty heavily while completing my senior thesis in undergrad, as well as during a couple of internships. 
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: My prior experience with R (which involved using R for data analysis) has helped me feel relatively comfortable with the R console, setup, format, and performing basic to intermediate functions/analyses.
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
+> Answer: I have some reservations about using Git, as I have no prior experience with it. Right now, it seems rather foreign to me. But I look forward to acquiring new experience and learning throughout the semester!
 
 
 ## 2) GitHub
 
 Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository  and that you have updated your course README file. 
 
-> Answer: 
+> Answer: https://github.com/sierrakindley/Environmental_Data_Analytics_2020.git
 
 
