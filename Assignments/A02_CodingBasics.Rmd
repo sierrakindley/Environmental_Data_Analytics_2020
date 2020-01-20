@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2: Coding Basics"
-author: "Student Name"
+author: "Sierra Kindley"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -32,11 +32,12 @@ The completed exercise is due on Tuesday, January 21 at 1:00 pm.
 4. Insert comments in your code to describe what you are doing.
 
 ```{r}
-#1. 
 
-#2. 
+#1. sequence1 <- seq(1, 100, by = 4) #create a sequence from 1 to 100 (beginning with 1) increasing by fours and assign the name 'sequence1' to said sequence 
 
-#3. 
+#2. mean(sequence1); median(sequence1) #compute the mean of the sequence 'sequence1'; compute the median of the sequence 'sequence1'
+
+#3. mean(sequence1) > median(sequence1) #ask R if the mean of 'sequence1' is greater than the median of 'sequence1'
 
 ```
 
@@ -52,11 +53,18 @@ The completed exercise is due on Tuesday, January 21 at 1:00 pm.
 
 ```{r}
 
+students <- c("Anna", "John", "Katie", "Zach") #create a four-component character vector of names of students and assign the name 'students' to said vector
+scores <- c(84, 79, 90, 48) #create a four-component numeric vector of student test scores and assign the name 'scores'to said vector
+passed <- c(TRUE, TRUE, TRUE, FALSE) #create a four-component logical vector denoting whether or not each student's test score was a passing grade of 50 or above
+testresults <- data.frame(students, scores, passed) #combine the vectors 'students', 'scores', and 'passed' into a data frame and assign the name 'testresults' to said data frame
+names(testresults) <- c("Student Name", "Test Score", "Passed") #label the columns of the data frame 'testresults' with the titles 'Student Name', 'Test Score', and 'Passed'
+testresults #generate an output of the data frame 'testresults' in the console
+
 ```
 
 9. QUESTION: How is this data frame different from a matrix?
 
-> Answer: 
+> Answer: This data frame is different from a matrix in that it is comprised of columns of different data types (character, numeric, logical). In contrast, a matrix contains elements that are the same type of data.
 
 10. Create a function with an if/else statement. Your function should determine whether a test score is a passing grade of 50 or above (TRUE or FALSE). You will need to choose either the `if` and `else` statements or the `ifelse` statement. Hint: Use `print`, not `return`. The name of your function should be informative.
 
@@ -64,8 +72,14 @@ The completed exercise is due on Tuesday, January 21 at 1:00 pm.
 
 ```{r}
 
+passtest <- function(x) {
+  result <- ifelse(x >= 50, "Pass", "Fail") 
+  print(result)
+} #create a function with the name 'passtest' that determines whether a test score is a passing grade of 50 or above; all test scores greater than or equal to 50 print "Pass", and all scores less than 50 print "Fail"
+passtest(scores) #apply the function 'passtest' to the vector 'scores' and print the results of the function 'passtest' as applied to each of the elements in the vector 'scores' in the console
+
 ```
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer: 
+> Answer: The option of writing a function using the 'ifelse' statement worked. I believe this is because using the 'ifelse' statement allows you to evaluate the entire vector based on the given conditions and print a result for each of the elements in the vector at once. If 'if' and 'else' statements were used alone, R would be unable to evaluate and generate an output for each of the elements in the vector all at once. When I tried to use 'if' and 'else' statements to write my function, I received a warning message in the console saying the condition had a length > 1 and that only the first element would be used. As they were written, the 'if' and 'else' statements would only be able to evaluate and print the result for one of the elements in the vector at a time (and only the first element in the vector would be used) without additonal code accompanying them.
