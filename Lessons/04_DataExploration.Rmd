@@ -63,11 +63,11 @@ You may also import datasets from the Files tab, but this is not recommended sin
 # Absolute file path (not recommended)
 #read.csv("/Users/katerisalk/Documents/Duke/Courses/Environmental_Data_Analytics/Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 
-# Relative file path (friendly for users regardless of machine)
+# Relative file path (friendly for users regardless of machine)...staring name in parentheses with one dot tells R to go in one folder level, while beginning with two dots tells R to go out one folder level--then the new folder(s) you want to enter is specified
 USGS.flow.data <- read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 
 # What happens if we don't assign a name to our imported dataset?
-#read.csv("../Data/Raw/USGS_Site02085000_Flow_Raw.csv")
+#read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 
 # Another option is to choose with your browser
 # read.csv(file.choose())
@@ -80,7 +80,7 @@ USGS.flow.data <- read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")
 ## EXPLORE YOUR DATASET
 
 Take a moment to read through the README file associated with the USGS dataset on discharge at the Eno River. Where can you find this file? How does the placement and information found in this file relate to the best practices for reproducible data analysis?
-> ANSWER: 
+> ANSWER: This file can be found in the metadata folder. Metadata provides more useful infomration about the dataset than the data file itself. This information is useful in the interpretation, understanding, and use of the data. Also, having access to the web source of the data via the metadata file is useful to be able to go back to the original source of the data. This metadata file also allows you to see the status of the data (approved, provisional, etc.) at the time of download. In addition, the information in this file is labeled with units and uses a defined naming convention (which is explained in the metadata file).
 
 ```{r}
 View(USGS.flow.data)
@@ -96,7 +96,7 @@ colnames(USGS.flow.data) <- c("agency_cd", "site_no", "datetime",
                               "discharge.mean", "discharge.mean.approval", 
                               "gage.height.max", "gage.height.max.approval", 
                               "gage.height.min", "gage.height.min.approval", 
-                              "gage.height.mean", "gage.height.mean.approval")
+                              "gage.height.mean", "gage.height.mean.approval") #try not to exceed 80 characters per line of code
 str(USGS.flow.data)
 dim(USGS.flow.data)
 length(USGS.flow.data)
@@ -115,7 +115,7 @@ summary(USGS.flow.data)
 ```
 
 What happened to blank cells in the spreadsheet when they were imported into R?
-> Answer: 
+> Answer: Blank cells that are part of numeric vectors/variables are now listed as NAs in R. Blank cells part of factor vectors/variables remain blank in R.
 
 ## Adjusting Datasets
 
@@ -129,10 +129,10 @@ summary(USGS.flow.data$gage.height.mean)
 ```
 Question: What types of research questions might make it favorable to remove NAs from a dataset, and what types of research questions might make it favorable to retain NAs in the dataset?
 
-> Answer: 
+> Answer: Retain NAs: future reference (I need more site data here, when...); Remove NAs: calculations, data analysis based on presence data only (vs. presence and absence data)
 
 ```{r}
-USGS.flow.data.complete <- na.omit(USGS.flow.data)
+USGS.flow.data.complete <- na.omit(USGS.flow.data) #If you are making permanent changes to your dataset (which we are doing here), it is wise to call the resulting dataset something else/new (here, it is 'USGS.flow.data.complete')
 dim(USGS.flow.data)
 dim(USGS.flow.data.complete)
 
@@ -157,7 +157,7 @@ Formatting of dates in R:
 %b  abbreviated month
 %B  unabbreviated month
 
-In some cases when dates are provided as integers, you may need to provide an origin for your dates. Beware: the "origin" date for Excel (Windows), Excel (Mac), R, and MATLAB all have different origin dates. Google this if it comes up.
+In some cases when dates are provided as integers, you may need to provide an origin for your dates. Beware: the "origin" date for Excel (Windows), Excel (Mac), R, and MATLAB all have different origin dates. Google this if it comes up. In R, this origin date is January 1, 1970.
 
 ```{r}
 help(as.Date)
@@ -168,9 +168,9 @@ help(as.Date)
 # (code must be uncommented)
 today <- Sys.Date()
 format(today, format = "%B")
-#format(today, format = "")
-#format(today, format = "")
-#format(today, format = "")
+format(today, format = "%d")
+format(today, format = "%A")
+format(today, format = "%Y")
 
 USGS.flow.data$datetime <- as.Date(USGS.flow.data$datetime, format = "%m/%d/%y") 
 ```
