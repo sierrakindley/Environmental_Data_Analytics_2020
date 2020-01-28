@@ -75,8 +75,8 @@ summary(Neonics$Effect) #ask R for a summary of the 'Effect' column in the datas
 
 ```{r}
 
-summary(Neonics$Species.Common.Name) #ask R for a summary of the 'Species.Common.Name' column
-#in the dataset 'Neonics'
+summary(Neonics$Species.Common.Name) 
+#ask R for a summary of the 'Species.Common.Name' column in the dataset 'Neonics'
 
 ```
 
@@ -86,8 +86,8 @@ summary(Neonics$Species.Common.Name) #ask R for a summary of the 'Species.Common
 
 ```{r}
 
-class(Neonics$Conc.1..Author.) #ask R the class of the column 'Conc.1..Author.' in
-#the dataset 'Neonics'
+class(Neonics$Conc.1..Author.) 
+#ask R the class of the column 'Conc.1..Author.' in the dataset 'Neonics'
 
 ```
 
@@ -139,10 +139,11 @@ ggplot(Neonics, aes(x = Endpoint)) +
 ```{r}
 
 class(Litter$collectDate) #ask R what the class of collectDate is
-Litter$collectDate <- as.Date(Litter$collectDate, format = "%Y-%m-%d") #change the class of 
-#collectDate to date with the format "%Y-%m-%d"
+Litter$collectDate <- as.Date(Litter$collectDate, format = "%Y-%m-%d") 
+#change the class of collectDate to date with the format "%Y-%m-%d"
 class(Litter$collectDate) #ask R what the class of collectDate is again
-unique(Litter$collectDate, Litter$collectDate >= "2018-08-01" & Litter$collectDate <= "2018-08-31", incomparables = FALSE)
+unique(Litter$collectDate, Litter$collectDate >= "2018-08-01" 
+       & Litter$collectDate <= "2018-08-31", incomparables = FALSE)
 #extract all the dates on which litter was sampled in August 2018 from the dataset with no duplicates
 
 ```
@@ -151,8 +152,8 @@ unique(Litter$collectDate, Litter$collectDate >= "2018-08-01" & Litter$collectDa
 
 ```{r}
 
-unique(Litter$plotID, incomparables = FALSE) #ask R for only the names of the plots sampled at 
-#Niwot Ridge with no duplicates
+unique(Litter$plotID, incomparables = FALSE) 
+#ask R for only the names of the plots sampled at Niwot Ridge with no duplicates
 
 ```
 
@@ -171,11 +172,12 @@ ggplot(Litter, aes(x = functionalGroup)) +
 ```{r, fig.height = 4, fig.width = 9}
 
 ggplot(Litter) +
-  geom_boxplot(aes(x = functionalGroup, y = dryMass)) #generate a boxplot of dryMass by functionalGroup
+  geom_boxplot(aes(x = functionalGroup, y = dryMass)) 
+#generate a boxplot of dryMass by functionalGroup
 
 ggplot(Litter) +
-  geom_violin(aes(x = functionalGroup, y = dryMass)) #generate a violin plot of dryMass by
-#functionalGroup
+  geom_violin(aes(x = functionalGroup, y = dryMass)) 
+#generate a violin plot of dryMass by functionalGroup
 
 ```
 
