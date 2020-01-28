@@ -69,7 +69,7 @@ summary(Neonics$Effect) #ask R for a summary of the 'Effect' column in the datas
 
 ```
 
-> Answer: The most common effects studied are population and mortality. 
+> Answer: The most common effects studied are population and mortality. It is important to know how/if neonicotinoids affect insect populations and/or kill individual insects. If the aim at using neonicotinoids in agriculture is to kill or deter pests, studying mortality and populations of insects will aid in determining how effective their use is. In addition, these types of studies may shed light on potential undesired effects of neonicotinoid use on insects (killing or negatively impacting populations of essential insect species).
 
 7. Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.
 
