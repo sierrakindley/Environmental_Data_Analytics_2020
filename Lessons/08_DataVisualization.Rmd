@@ -84,7 +84,7 @@ print(O3plot)
 
 # Fix this code
 O3plot2 <- ggplot(EPAair) +
-  geom_point(aes(x = Date, y = Ozone, color = "blue"))
+  geom_point(aes(x = Date, y = Ozone), color = "blue")
 print(O3plot2)
 
 # Add additional variables
@@ -121,11 +121,21 @@ print(PMplot.line)
 # 1. 
 # Plot surface temperatures by day of  year. 
 # Color your points by year, and facet by lake in two rows.
-
+PP.temp <-
+    ggplot(subset(PeterPaul.chem.nutrients, depth == 0)) + #need to subset dataset by calling for depth = 0 in order to get only surface temperatures
+    geom_point(aes( x = daynum, y = temperature_C, color = year4)) +
+    facet_grid(vars(lakename))
+#OR facet_wrap(vars(lakename), nrow = 2)
+print(PP.temp)
 
 #2. 
 # Plot temperature by date. Color your points by depth.
 # Change the size of your point to 0.5
+PP.temp2 <-
+  ggplot(PeterPaul.chem.nutrients) +
+  geom_point(aes(x = sampledate, y = temperature_C, color = depth),
+              size = 0.5)
+print(PP.temp2)
 
 
 ```
@@ -157,8 +167,8 @@ print(tempvsdepth)
 NvsP <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth)) +
   geom_point() +
-  geom_smooth(method = lm) +
-  geom_abline(aes(slope = 16, intercept = 0))
+  geom_smooth(method = lm) + #adds line of best fit to plot; could add ', se = FALSE' in parentheses after 'lm'
+  geom_abline(aes(slope = 16, intercept = 0)) #adds AB line that we define (we specify slope and intercept) to plot
 print(NvsP)
 
 # Exercise: Plot relationships between air quality measurements
@@ -204,7 +214,7 @@ Nutrientplot6 <-
   geom_freqpoly(aes(x = tp_ug), color = "darkblue") +
   geom_freqpoly(aes(x = nh34), color = "blue") +
   geom_freqpoly(aes(x = no23), color = "royalblue") +
-  geom_freqpoly(aes(x = po4), color = "red") 
+  geom_freqpoly(aes(x = po4), color = "red") #have to make a separate layer for each column you want to plot
 print(Nutrientplot6)
 
 # Using a gathered dataset
