@@ -69,8 +69,8 @@ Notice that some aspects of your graph have not been adjusted, including:
 
 If you would like to set a common theme across all plots in your analysis session, you may define a theme and call up that theme for each graph. This eliminates the need to add multiple lines of code in each plot. 
 
-```{r, fig.height = 3, fig.width = 4, warning = FALSE}
-mytheme <- theme_classic(base_size = 14) +
+```{r, fig.height = 3, fig.width = 4, warning = FALSE} 
+mytheme <- theme_classic(base_size = 14) +                    #make your own theme; can be helpful to change text size
   theme(axis.text = element_text(color = "black"), 
         legend.position = "top") #alternative: legend.position + legend.justification
 
@@ -79,9 +79,9 @@ mytheme <- theme_classic(base_size = 14) +
 O3plot5 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
   mytheme
-print(O3plot5)  
+print(O3plot5)  #doesn't print legend on plot becuase we never told it anything to actually put in the legend...this needs to be done in order for it to be printed with the plot
 
-theme_set(mytheme)
+theme_set(mytheme) #sets theme so all following plots will use that theme
 
 O3plot6 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone))
@@ -95,16 +95,16 @@ While the theme allows us to set multiple aspects of plots, ggplot allows us to 
 
 ```{r, fig.height = 3, fig.width = 4, warning = FALSE}
 O3plot7 <- ggplot(EPAair, aes(x = Date, y = Ozone)) +
-  geom_hline(yintercept = 50, lty = 2) +
-  geom_hline(yintercept = 100, lty = 2) +
-  geom_point(alpha = 0.5, size = 1.5) +
-  geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") +
-  geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") +
-  geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") +
-  scale_x_date(limits = as.Date(c("2018-01-01", "2019-12-31")), 
-    date_breaks = "2 months", date_labels = "%b %y") +
-  ylab(expression("O"[3]* " AQI Value")) +
-  theme(axis.text.x = element_text(angle = 45,  hjust = 1))
+  geom_hline(yintercept = 50, lty = 2) +    #adds horizontal line to plot
+  geom_hline(yintercept = 100, lty = 2) +   #adds horizontal line to plot
+  geom_point(alpha = 0.5, size = 1.5) +     #adds 50% transparent points to plot and changes the point size; adds these points on top of horizontal lines from the lines of code above--ggplot adds things in layers in order of command
+  geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") + #defines where to put a text label with respect to the x and y-axes
+  geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") + #defines where to put a text label with respect to the x and y-axes
+  geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") + #defines where to put a  text label with respect to the x and y-axes
+  scale_x_date(limits = as.Date(c("2018-01-01", "2019-12-31")), #defines desired date range/limits
+    date_breaks = "2 months", date_labels = "%b %y") + #defines date breaks and how to label them
+  ylab(expression("O"[3]* " AQI Value")) + #define y-axis label; '3' in brackets is putting it as a subscript and '*' denotes that you're done making the subscript
+  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) #put text on x-axis at a 45 degree angle and apply a horizontal adjustment of 1
 print(O3plot7)  
 
 ```
@@ -175,7 +175,10 @@ print(NvsP)
 NvsP2 <-
   ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = tn_ug, color = depth, shape = lakename)) +
   geom_point(alpha = 0.7, size = 2.5) +
-  #labs() + # change your legend labels here
+  xlab("TP (ug/L)") + #change your x-axis label here 
+  ylab("TN (ug/L)") + #change your y-axis label here
+  labs(color = "Depth (m)", shape = "Lake Name") + #change your legend labels here
+  #labs(x = expression(paste("TP (", mu, "g/L)")), y = expression(paste("TN (", mu, "g/L)")), color = "Depth (m)", shape = "Lake Name"); this code will yield the same result as lines 178, 179, and 180 combined
   scale_shape_manual(values = c(15, 17)) +
   #scale_color_distiller(palette = "Blues", direction = 1) + # use scale_color_brewer for discrete variables
   scale_color_viridis(option = "magma", direction = -1) +
@@ -191,10 +194,11 @@ Nutrientplot <-
   ggplot(PeterPaul.chem.nutrients.gathered, aes(x = lakename, y = concentration, color = nutrient)) +
   geom_boxplot() +
 # place your additional edits here
+  labs(x = "", y = expression(paste("Concentration (", mu, "g/L)")), color = "Nutrient") #still ned to change the labels for nutrients in the legend (use a scale and define)
   scale_y_continuous(expand = c(0, 0)) +
   #scale_color_brewer(palette = "YlGnBu") +
   #scale_color_manual(values = c("#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#0c2c84")) +
-  #scale_color_viridis(discrete = TRUE, end = 0.8) +
+  scale_color_viridis(discrete = TRUE, end = 0.8) + #this is my chosen color palette
   theme(legend.position = "right")
 print(Nutrientplot)
 ```
