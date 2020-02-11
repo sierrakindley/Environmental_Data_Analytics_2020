@@ -102,15 +102,15 @@ PeterPaulPlot2 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
   xlab(expression(paste("Month"))) + #change x-label
   ylab(expression(paste("Temperature (Celsius)")))+ #change y-label
   scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
-  theme(legend.position = "none") #remove legend from plot
-
+  theme(legend.title = element_blank()) #remove legend title
+  
 PeterPaulPlot3 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
   geom_boxplot(aes(x = as.factor(month), y = tp_ug, color = lakename)) +
   xlab(expression(paste("Month"))) + #change x-label
   ylab(expression(paste("Total Phosphorus (", mu, "g/L)"))) + #change y-label
   ylim(0,100) + #define limits of y-axis
   scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
-  theme(legend.title = element_blank()) #remove legend title
+  theme(legend.position = "none") #remove legend from plot
 
 PeterPaulPlot4 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) + 
   geom_boxplot(aes(x = as.factor(month), y = tn_ug, color = lakename)) +
