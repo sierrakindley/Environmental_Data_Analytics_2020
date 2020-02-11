@@ -84,7 +84,7 @@ PeterPaulPlot1 <- ggplot(PeterPaul.chem.nutrients,
   ylim(0,30) + #define limits of y-axis
   xlim(0,150) + #define limits of x-axis
   ylab(expression(paste("PO"[4]* " (", mu, "g/L)"))) + #change y-label
-  xlab(expression(paste("Total Phosphorus (", mu, "g/L)"))) + #change x-label
+  xlab(expression(paste("TP (", mu, "g/L)"))) + #change x-label
   geom_smooth(method = lm, se = FALSE, color = "black") + #add black line of best fit 
   scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
   theme(legend.title = element_blank()) #remove legend title
@@ -100,14 +100,14 @@ print(PeterPaulPlot1) #print plot
 PeterPaulPlot2 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
   geom_boxplot(aes(x = as.factor(month), y = temperature_C, color = lakename)) +
   xlab(expression(paste("Month"))) + #change x-label
-  ylab(expression(paste("Temperature (Celsius)")))+ #change y-label
+  ylab(expression(paste("Temperature ("*~degree*C*")")))+ #change y-label
   scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
   theme(legend.title = element_blank()) #remove legend title
   
 PeterPaulPlot3 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
   geom_boxplot(aes(x = as.factor(month), y = tp_ug, color = lakename)) +
   xlab(expression(paste("Month"))) + #change x-label
-  ylab(expression(paste("Total Phosphorus (", mu, "g/L)"))) + #change y-label
+  ylab(expression(paste("TP (", mu, "g/L)"))) + #change y-label
   ylim(0,100) + #define limits of y-axis
   scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
   theme(legend.position = "none") #remove legend from plot
@@ -115,7 +115,7 @@ PeterPaulPlot3 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
 PeterPaulPlot4 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) + 
   geom_boxplot(aes(x = as.factor(month), y = tn_ug, color = lakename)) +
   xlab(expression(paste("Month"))) + #change x-label
-  ylab(expression(paste("Total Nitrogen (", mu, "g/L)"))) + #change y-label
+  ylab(expression(paste("TN (", mu, "g/L)"))) + #change y-label
   ylim(0,2300) + #define limits of y-axis
   scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
   theme(legend.position = "none") #remove legend from plot
@@ -147,7 +147,7 @@ NiwotRidgePlot1 <-
                                 expression("Grassland Herbaceous"), 
                                 expression("Shrub Scrub"))) + 
   #assign colors & labels to data by NLCD class 
-  theme(legend.title = element_blank()) + #remove legend title
+  labs(color = "Land Cover")
 print(NiwotRidgePlot1) #print plot
 
 #7
@@ -157,13 +157,11 @@ NiwotRidgePlot1.faceted <-
   facet_wrap(vars(nlcdClass), nrow = 3) + #create facets by NLCD class
   xlab(expression(paste("Date"))) + #change x-label
   ylab(expression(paste("Dry Mass (g)"))) + #change y-label
-  scale_color_manual(values = c("#7fcdbb", "#1d91c0", "#0c2c84")) +
-  #assign colors to data by NLCD class (wasn't required, but I think it yields easier reading)
-  theme(legend.position = "none") + #remove legend from plot
+  theme(legend.position = "none") #remove legend from plot
 print(NiwotRidgePlot1.faceted) #print plot
 
 ```
 
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: I think the faceted plot (plot in question 7) is more effective, as it is more visually appealing and understandable. I think separating the data into three facets based on NLCD class helps greatly with the overall interpretation of the data, as it separates it out and allows for clearer interpretation and easier comparison between NLCD classes. The plot in question 6 is okay, but because all the data is lumped together on a single plot, I find it much more difficult to visualize and interpret the data, as well as make comparisons between the three NLCD classes. In addition, I realize the directions said it wasn't necessary to separate the data by color in addition to separating the data into three facets based on NLCD class. However, I feel separating by both color and facet yielded the greatest visual appeal and the easiest data interpretation and differentiation.
+> Answer: I think the faceted plot (plot in question 7) is more effective, as it is more visually appealing and understandable. I think separating the data into three facets based on NLCD class helps greatly with the overall interpretation of the data, as it separates it out and allows for clearer interpretation and easier comparison between NLCD classes. The plot in question 6 is okay, but because all the data is lumped together on a single plot, I find it much more difficult to visualize and interpret the data, as well as distinguish and make comparisons between the three NLCD classes.
