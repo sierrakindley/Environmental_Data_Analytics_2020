@@ -84,25 +84,25 @@ print(Ozone.plot)
 
 Write a sentence or two about the results of this test. Include both the results of the test and an interpretation that puts the findings in context of the resarch question.
 
-> 
+>  This test yields a distribution that is not a normal distribution. It is skewed to the left. Thus, generally, in the context of the research question, Ozone levels are collectively below the threshold for "good" AQI index (0-50).
 
 ### Two-sample t-test
 The two-sample *t* test is used to test the hypothesis that the mean of two samples is equivalent. Unlike the one-sample tests, a two-sample test requires a second assumption that the variance of the two groups is equivalent. Are Ozone levels different between 2018 and 2019?
 
 ```{r}
 shapiro.test(EPAair$Ozone[EPAair$Year == 2018])
-shapiro.test(EPAair$Ozone[EPAair$Year == 2019])
+shapiro.test(EPAair$Ozone[EPAair$Year == 2019]) #null hypothesis (for lines 93 & 94): sample is well approximated by a normal distribution (evidenced by very low p-values)
 var.test(EPAair$Ozone ~ EPAair$Year)
 
 ggplot(EPAair, aes(x = Ozone, color = as.factor(Year))) +
   geom_freqpoly()
 
 # Format as a t-test
-O3.twosample <- t.test(EPAair$Ozone ~ EPAair$Year)
-O3.twosample
+O3.twosample <- t.test(EPAair$Ozone ~ EPAair$Year) #testing ozone BY year (~ = by) 
+O3.twosample #two-sample t-test; rejected null hypothesis that these means are equal
 O3.twosample$p.value
 
-# Format as a GLM
+# Format as a GLM (generalized linear model)
 O3.twosample2 <- lm(EPAair$Ozone ~ EPAair$Year)
 summary(O3.twosample2)
 
@@ -130,6 +130,17 @@ Create three plots, each with appropriately formatted axes and legends. Choose a
 
 ```{r}
 
+densityplot1 <- ggplot(EPAair, aes(x = Ozone/Year, color = as.factor(Year))) +
+  geom_density()
+print(densityplot1)
+
+densityplot2 <- ggplot(EPAair, aes(x = Year, y = Ozone/Year, color = as.factor(Year))) +
+  geom_boxplot()
+print(densityplot2)
+
+densityplot3 <- ggplot(EPAair, aes(x = Year, y = Ozone/Year, color = as.factor(Year))) +
+  geom_violin(draw_quantiles = 0.5)
+print(densityplot3)
 
 ```
 
