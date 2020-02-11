@@ -148,7 +148,6 @@ NiwotRidgePlot1 <-
                                 expression("Shrub Scrub"))) + 
   #assign colors & labels to data by NLCD class 
   theme(legend.title = element_blank()) + #remove legend title
-  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) #format text on x-axis
 print(NiwotRidgePlot1) #print plot
 
 #7
@@ -161,7 +160,6 @@ NiwotRidgePlot1.faceted <-
   scale_color_manual(values = c("#7fcdbb", "#1d91c0", "#0c2c84")) +
   #assign colors to data by NLCD class (wasn't required, but I think it yields easier reading)
   theme(legend.position = "none") + #remove legend from plot
-  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) #format text on x-axis
 print(NiwotRidgePlot1.faceted) #print plot
 
 ```
