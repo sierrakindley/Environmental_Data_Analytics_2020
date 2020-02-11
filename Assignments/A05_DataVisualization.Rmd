@@ -120,8 +120,8 @@ PeterPaulPlot4 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
   scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
   theme(legend.position = "none") #remove legend from plot
 
-plot_grid(PeterPaulPlot2, PeterPaulPlot3, PeterPaulPlot4, nrow = 3, align = 'v', 
-          axis = "bt", rel_widths = c(1,1,1), rel_heights = c(1,1,1))
+plot_grid(PeterPaulPlot2, PeterPaulPlot3, PeterPaulPlot4, nrow = 3, 
+          align = 'v', rel_heights = c(1.25, 1, 1))
 #combine three previous graphs into one cowplot with one legend and aligned axes
 
 ```
