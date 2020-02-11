@@ -153,7 +153,7 @@ print(NiwotRidgePlot1) #print plot
 #7
 NiwotRidgePlot1.faceted <- 
   ggplot(subset(NiwotRidge.litter, functionalGroup == "Needles")) +
-  geom_point(aes(x = collectDate, y = dryMass, color = nlcdClass)) +
+  geom_point(aes(x = collectDate, y = dryMass)) +
   facet_wrap(vars(nlcdClass), nrow = 3) + #create facets by NLCD class
   xlab(expression(paste("Date"))) + #change x-label
   ylab(expression(paste("Dry Mass (g)"))) + #change y-label
