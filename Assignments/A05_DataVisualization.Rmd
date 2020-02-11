@@ -1,6 +1,6 @@
 ---
 title: "Assignment 5: Data Visualization"
-author: "Student Name"
+author: "Sierra Kindley"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -29,10 +29,33 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 
 ```{r}
 #1
-
+getwd() #verify working directory
+library(tidyverse) #load tidyverse packages
+library(cowplot) #load cowplot package
+PeterPaul.chem.nutrients <- 
+  read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
+PeterPaul.chem.nutrients.gathered <-
+  read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv")
+#upload NTL-LTER processed data files 
+NiwotRidge.litter <-
+  read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv")
+#upload Niwot Ridge litter processed data file
 
 #2
+class(PeterPaul.chem.nutrients$sampledate) #check class of 'sampledate' column
+PeterPaul.chem.nutrients$sampledate <- 
+  as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d") 
+  #format 'sampledate' column as date
 
+class(PeterPaul.chem.nutrients.gathered$sampledate) #check class of 'sampledate' column
+PeterPaul.chem.nutrients.gathered$sampledate <- 
+  as.Date(PeterPaul.chem.nutrients.gathered$sampledate, format = "%Y-%m-%d") 
+  #format 'sampledate' column as date
+
+class(NiwotRidge.litter$collectDate) #check class of 'collectDate' column
+NiwotRidge.litter$collectDate <- 
+  as.Date(NiwotRidge.litter$collectDate, format = "%Y-%m-%d") 
+  #format 'collectDate' column as date
 
 ```
 ## Define your theme
@@ -40,6 +63,11 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 
 ```{r}
 
+sierratheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+#build new theme 'sierratheme' and define what its parameters
+theme_set(sierratheme) #set sierratheme as default theme
 
 ```
 
@@ -50,7 +78,17 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r}
 
-
+PeterPaulPlot1 <- ggplot(PeterPaul.chem.nutrients, 
+                          aes(x = tp_ug, y = po4, color = lakename)) +
+  geom_point() +
+  ylim(0,30) + #define limits of y-axis
+  xlim(0,150) + #define limits of x-axis
+  ylab(expression(paste("PO"[4]* " (", mu, "g/L)"))) + #change y-label
+  xlab(expression(paste("Total Phosphorus (", mu, "g/L)"))) + #change x-label
+  geom_smooth(method = lm, se = FALSE, color = "black") + #add black line of best fit 
+  scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
+  theme(legend.title = element_blank()) #remove legend title
+print(PeterPaulPlot1) #print plot 
 
 ```
 
@@ -59,12 +97,38 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r}
 
+PeterPaulPlot2 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
+  geom_boxplot(aes(x = as.factor(month), y = temperature_C, color = lakename)) +
+  xlab(expression(paste("Month"))) + #change x-label
+  ylab(expression(paste("Temperature (Celsius)")))+ #change y-label
+  scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
+  theme(legend.position = "none") #remove legend from plot
+
+PeterPaulPlot3 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) +
+  geom_boxplot(aes(x = as.factor(month), y = tp_ug, color = lakename)) +
+  xlab(expression(paste("Month"))) + #change x-label
+  ylab(expression(paste("Total Phosphorus (", mu, "g/L)"))) + #change y-label
+  ylim(0,100) + #define limits of y-axis
+  scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
+  theme(legend.title = element_blank()) #remove legend title
+
+PeterPaulPlot4 <- ggplot(subset(PeterPaul.chem.nutrients, depth < 0.25)) + 
+  geom_boxplot(aes(x = as.factor(month), y = tn_ug, color = lakename)) +
+  xlab(expression(paste("Month"))) + #change x-label
+  ylab(expression(paste("Total Nitrogen (", mu, "g/L)"))) + #change y-label
+  ylim(0,2300) + #define limits of y-axis
+  scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to Peter & Paul Lakes
+  theme(legend.position = "none") #remove legend from plot
+
+plot_grid(PeterPaulPlot2, PeterPaulPlot3, PeterPaulPlot4, nrow = 3, align = 'h', 
+          axis = "bt", rel_widths = c(1,1,1), rel_heights = c(1,1,1))
+#combine three previous graphs into one cowplot with one legend and aligned axes
 
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
-> Answer: 
+> Answer: The temperature in the lakes appears slightly higher in the summer months and, in general, the temperature does not vary too much between lakes. Total phosphorous does not appear to vary much over seasons, but the TP values in Peter Lake are consistently higher than those in Paul Lake. Similarly, total nitrogen values do not vary much over seasons, but the TP values in Peter Lake are consistently higher than those in Paul Lake.
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
 
@@ -72,10 +136,36 @@ Question: What do you observe about the variables of interest over seasons and b
 
 ```{r}
 
+NiwotRidgePlot1 <- 
+  ggplot(subset(NiwotRidge.litter, functionalGroup == "Needles"),
+                aes(x = collectDate, y = dryMass, color = nlcdClass)) +
+  geom_point() +
+  xlab(expression(paste("Date"))) + #change x-label
+  ylab(expression(paste("Dry Mass (g)"))) + #change y-label
+  scale_color_manual(values = c("#7fcdbb", "#1d91c0", "#0c2c84"), 
+                     labels = c(expression("Evergreen Forest"), 
+                                expression("Grassland Herbaceous"), 
+                                expression("Shrub Scrub"))) + 
+  #assign colors & labels to data by NLCD class 
+  theme(legend.title = element_blank()) + #remove legend title
+  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) #format text on x-axis
+print(NiwotRidgePlot1) #print plot
 
+
+NiwotRidgePlot1.faceted <- 
+  ggplot(subset(NiwotRidge.litter, functionalGroup == "Needles")) +
+  geom_point(aes(x = collectDate, y = dryMass, color = nlcdClass)) +
+  facet_wrap(vars(nlcdClass), nrow = 3) + #create facets by NLCD class
+  xlab(expression(paste("Date"))) + #change x-label
+  ylab(expression(paste("Dry Mass (g)"))) + #change y-label
+  scale_color_manual(values = c("#7fcdbb", "#1d91c0", "#0c2c84")) +
+  #assign colors to data by NLCD class (wasn't required, but I think it yields easier reading)
+  theme(legend.position = "none") + #remove legend from plot
+  theme(axis.text.x = element_text(angle = 45,  hjust = 1)) #format text on x-axis
+print(NiwotRidgePlot1.faceted) #print plot
 
 ```
 
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: 
+> Answer: I think the faceted plot (plot in question 7) is more effective, as it is more visually appealing and understandable. I think separating the data into three facets based on NLCD class helps greatly with the overall interpretation of the data, as it separates it out and allows for clearer interpretation and easier comparison between NLCD classes. The plot in question 6 is okay, but because all the data is lumped together on a single plot, I find it much more difficult to visualize and interpret the data, as well as make comparisons between the three NLCD classes. In addition, I realize the directions said it wasn't necessary to separate the data by color in addition to separating the data into three facets based on NLCD class. However, I feel separating by both color and facet yielded the greatest visual appeal and easiest data interpretation.
