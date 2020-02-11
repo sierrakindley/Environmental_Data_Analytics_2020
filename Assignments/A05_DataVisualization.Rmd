@@ -34,10 +34,10 @@ library(tidyverse) #load tidyverse packages
 library(cowplot) #load cowplot package
 PeterPaul.chem.nutrients <- 
   read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
-PeterPaul.chem.nutrients.gathered <-
+PeterPaul.chem.nutrients.gathered <- 
   read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv")
 #upload NTL-LTER processed data files 
-NiwotRidge.litter <-
+NiwotRidge.litter <- 
   read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv")
 #upload Niwot Ridge litter processed data file
 
@@ -135,7 +135,7 @@ Question: What do you observe about the variables of interest over seasons and b
 7. [Niwot Ridge] Now, plot the same plot but with NLCD classes separated into three facets rather than separated by color. 
 
 ```{r}
-
+#6
 NiwotRidgePlot1 <- 
   ggplot(subset(NiwotRidge.litter, functionalGroup == "Needles"),
                 aes(x = collectDate, y = dryMass, color = nlcdClass)) +
@@ -151,7 +151,7 @@ NiwotRidgePlot1 <-
   theme(axis.text.x = element_text(angle = 45,  hjust = 1)) #format text on x-axis
 print(NiwotRidgePlot1) #print plot
 
-
+#7
 NiwotRidgePlot1.faceted <- 
   ggplot(subset(NiwotRidge.litter, functionalGroup == "Needles")) +
   geom_point(aes(x = collectDate, y = dryMass, color = nlcdClass)) +
@@ -168,4 +168,4 @@ print(NiwotRidgePlot1.faceted) #print plot
 
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: I think the faceted plot (plot in question 7) is more effective, as it is more visually appealing and understandable. I think separating the data into three facets based on NLCD class helps greatly with the overall interpretation of the data, as it separates it out and allows for clearer interpretation and easier comparison between NLCD classes. The plot in question 6 is okay, but because all the data is lumped together on a single plot, I find it much more difficult to visualize and interpret the data, as well as make comparisons between the three NLCD classes. In addition, I realize the directions said it wasn't necessary to separate the data by color in addition to separating the data into three facets based on NLCD class. However, I feel separating by both color and facet yielded the greatest visual appeal and easiest data interpretation.
+> Answer: I think the faceted plot (plot in question 7) is more effective, as it is more visually appealing and understandable. I think separating the data into three facets based on NLCD class helps greatly with the overall interpretation of the data, as it separates it out and allows for clearer interpretation and easier comparison between NLCD classes. The plot in question 6 is okay, but because all the data is lumped together on a single plot, I find it much more difficult to visualize and interpret the data, as well as make comparisons between the three NLCD classes. In addition, I realize the directions said it wasn't necessary to separate the data by color in addition to separating the data into three facets based on NLCD class. However, I feel separating by both color and facet yielded the greatest visual appeal and the easiest data interpretation and differentiation.
