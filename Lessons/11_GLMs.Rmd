@@ -38,9 +38,9 @@ Does total litter biomass differ among sites at the Niwot Ridge LTER?
 # Wrangle the data
 Litter.Totals <- Litter %>%
   group_by(plotID, collectDate, nlcdClass) %>%
-  summarise(dryMass = sum(dryMass))
+  summarise(dryMass = sum(dryMass)) #add up totals of litter mass for each of the individual groupings we have specified
 
-# Test for normality. 
+# Test for normality (normal distribution of data)
 # Note: the important assumption for GLMs is normality of residuals, 
 # not necessarily normality of raw data. See below when we plot the model.
 shapiro.test(Litter.Totals$dryMass[Litter.Totals$plotID == "NIWO_040"])
@@ -58,15 +58,15 @@ shapiro.test(Litter.Totals$dryMass[Litter.Totals$plotID == "NIWO_067"])
 
 qqnorm(Litter.Totals$dryMass); qqline(Litter.Totals$dryMass)
 
-# Test for equal variance
+# Test for equal variance -- low p-value = values not at all close to one another
 # ANOVA is robust against departures from equal variance.
 bartlett.test(Litter.Totals$dryMass ~ Litter.Totals$plotID)
 
 # Format ANOVA as aov
-Litter.Totals.anova <- aov(data = Litter.Totals, dryMass ~ plotID)
+Litter.Totals.anova <- aov(data = Litter.Totals, dryMass ~ plotID) #predicting dryMass as y and plotID as alpha variables in y = (Beta)x + Alpha + Error equation
 summary(Litter.Totals.anova)
 
-# Format ANOVA as lm
+# Format ANOVA as lm -- only compares each variable to the intercept (not to one another)??; the 'intercept' is whichever variable is listed first in the dataset (e.g. the first plotID listed, etc.)
 Litter.Totals.anova2 <- lm(data = Litter.Totals, dryMass ~ plotID)
 summary(Litter.Totals.anova2)
 
@@ -75,7 +75,7 @@ summary(Litter.Totals.anova2)
 plot(Litter.Totals.anova2)
 
 # Post-hoc test
-TukeyHSD(Litter.Totals.anova)
+TukeyHSD(Litter.Totals.anova) #can only run on your 'aov' object (line 66); if any letters match, there are not significantly different values between them
 
 # Extract groupings for pairwise relationships
 Litter.Totals.groups <- HSD.test(Litter.Totals.anova, "plotID", group = TRUE)
@@ -95,7 +95,9 @@ print(Litter.Totals.plot)
 
 What information does the output give us? How might we report this information in a report?
 
-> 
+> Posed question: Does total litter biomass differ among sites at the Niwot Ridge LTER? 
+We found: Total litter biomass differed significantly among sites at the Niwot Ridge LTER (figure 1; ANOVA, F11,198 = 4.183, p < 0.0001).
+* The further away the F-statistic is from zero, the more likely you are to find significantly different groupings in your data.
 
 
 ### Non-parametric equivalent of ANOVA: Kruskal-Wallis Test
@@ -121,8 +123,8 @@ A two-way ANOVA allows us to examine the effects of two categorical explanatory 
 
 ```{r}
 # Format as aov
-Litter.anova.2way <- aov(data = Litter, dryMass ~ functionalGroup + nlcdClass)
-summary(Litter.anova.2way)
+Litter.anova.2way <- aov(data = Litter, dryMass ~ functionalGroup + nlcdClass) # '+' means we are testing the effect of functionalGroup and nlcdClass separately
+summary(Litter.anova.2way) # shows us that both functionalGroup and nlcdClass are significant predictors of biomass
 
 # Format as lm
 Litter.anova.2way2 <- lm(data = Litter, dryMass ~ functionalGroup + nlcdClass)
@@ -140,7 +142,7 @@ The output gives test statistics for each explanatory variable as well as the in
 
 ```{r}
 # Format as aov
-Litter.anova.2way3 <- aov(data = Litter, dryMass ~ functionalGroup * nlcdClass)
+Litter.anova.2way3 <- aov(data = Litter, dryMass ~ functionalGroup * nlcdClass) # '*' denotes we are testing interaction effects of functionalGroup and nlcdClass on dataset; 'functionalGroup:nlcdClass' p-value less than 0.05 denotes a significant interaction effect between the two predictor variables
 summary(Litter.anova.2way3)
 
 # Format as lm
@@ -164,7 +166,13 @@ Litter.groups
 # Edit this graph to make it more visually appealing.
 # Add letters to represent statistical groupings.
 Litter.anova.plot <- ggplot(Litter, aes(y = dryMass, x = nlcdClass, color = functionalGroup)) +
-  geom_boxplot()
+  geom_boxplot() +
+  xlab(expression(paste("NLCD Class"))) + 
+  ylab(expression(paste("Dry Mass (g)"))) +
+  labs(color = "Functional Group") +
+    stat_summary(geom = "text", fun.y = max, position = position_dodge(width=preserve = "total"), vjust = -1, size = 3.5,
+               label = c("d", "d", "d", "a", "d", "d", "d", "d", "d", "d", "d", "b", "d", "d", "d", "d", "d", "d", "cd", "bc", "d", "d", "d",
+                         "d"))
 print(Litter.anova.plot)
 
 ```
