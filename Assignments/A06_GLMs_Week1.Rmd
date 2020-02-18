@@ -1,6 +1,6 @@
 ---
 title: "Assignment 6: GLMs week 1 (t-test and ANOVA)"
-author: "Student Name"
+author: "Sierra Kindley"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -29,9 +29,21 @@ The completed exercise is due on Tuesday, February 18 at 1:00 pm.
 
 ```{r, message = FALSE}
 #1
-
+getwd() #verify working directory
+library(tidyverse) #load tidyverse packages
+library(cowplot) #load cowplot package
+library(agricolae) #load agricolae package
+PeterPaul.nutrients <- 
+  read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaul_Processed.csv")
+  #import the NTL-LTER lake nutrients processed dataset
 
 #2
+class(PeterPaul.nutrients$sampledate) #check class of 'sampledate' column
+PeterPaul.nutrients$sampledate <- 
+  as.Date(PeterPaul.nutrients$sampledate, format = "%Y-%m-%d") 
+  #format 'sampledate' column as date
+head(PeterPaul.nutrients$sampledate) 
+#call up head of 'sampledate' column to verify date formatting 
 
 ```
 
@@ -41,6 +53,11 @@ The completed exercise is due on Tuesday, February 18 at 1:00 pm.
 3. Wrangle your dataset so that it contains only surface depths and only the years 1993-1996, inclusive. Set month as a factor.
 ```{r}
 
+PeterPaul.nutrients <- filter(PeterPaul.nutrients, 
+                                depth < 0.25 &
+                                year4 > 1992 & year4 < 1997)
+  #select only surface depth data from years 1993-1996
+PeterPaul.nutrients$month <- as.factor(PeterPaul.nutrients$month) #set month as a factor
 
 ```
 
@@ -50,7 +67,7 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 
 4. Which application of the GLM will you use (t-test, one-way ANOVA, two-way ANOVA with main effects, or two-way ANOVA with interaction effects)? Justify your choice.
 
-> Answer: 
+> Answer: I will use a two-way ANOVA with interaction effects, as we are examining the effects of two categorical explanatory variables (lake name and month) on a continuous response variable (TN and TP). We want to know how TN and TP (separately) vary across lakes (location) and months (seasonality). I expect the effects of lake name and month may be dependent on one another, so I have chosen to run a two-way ANOVA with interaction effects.
 
 5. Run your test for TN. Include examination of groupings and consider interaction effects, if relevant.
 
@@ -58,10 +75,39 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 
 ```{r}
 #5
+sierratheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+#build new theme 'sierratheme' and define its parameters
+theme_set(sierratheme) #set sierratheme as default plot theme
 
+# Format as aov
+TN.anova.2way <- aov(data = PeterPaul.nutrients, tn_ug ~ lakename * month)
+summary(TN.anova.2way)
+
+# Run a post-hoc test for pairwise differences
+TukeyHSD(TN.anova.2way)
+
+TN.interaction <- with(PeterPaul.nutrients, interaction(lakename, month))
+TN.anova.2way2 <- aov(data = PeterPaul.nutrients, tn_ug ~ TN.interaction)
+
+TN.groups <- HSD.test(TN.anova.2way2, "TN.interaction", group = TRUE)
+TN.groups
 
 #6
 
+# Format as aov
+TP.anova.2way <- aov(data = PeterPaul.nutrients, tp_ug ~ lakename * month) 
+summary(TP.anova.2way)
+
+# Run a post-hoc test for pairwise differences
+TukeyHSD(TP.anova.2way)
+
+TP.interaction <- with(PeterPaul.nutrients, interaction(lakename, month))
+TP.anova.2way2 <- aov(data = PeterPaul.nutrients, tp_ug ~ TP.interaction)
+
+TP.groups <- HSD.test(TP.anova.2way2, "TP.interaction", group = TRUE)
+TP.groups
 
 ```
 
@@ -71,9 +117,34 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 
 ```{r}
 #7
+TN.anova.plot <- ggplot(PeterPaul.nutrients, aes(y = tn_ug, x = month, color = lakename)) +
+  geom_boxplot() +
+  xlab(expression(paste("Month"))) + #change x-label
+  ylab(expression(paste("TN (", mu, "g/L)"))) + #change y-label
+  labs(color = "Lake Name") +
+  scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to lakes
+    stat_summary(geom = "text", fun.y = max, position = position_dodge(width = 0.75, 
+                  preserve = "total"), vjust = -1, size = 3.5, 
+                  label = c("ab","b","ab","b","a","b","a","b","ab","ab"))
+    #add group labels to plot
+print(TN.anova.plot)
 
+TP.anova.plot <- ggplot(PeterPaul.nutrients, aes(y = tp_ug, x = month, color = lakename)) +
+  geom_boxplot() +
+  xlab(expression(paste("Month"))) + #change x-label
+  ylab(expression(paste("TP (", mu, "g/L)"))) + #change y-label
+  labs(color = "Lake Name") +
+  scale_color_manual(values = c("#0c2c84", "#7fcdbb")) + #assign colors to lakes
+    stat_summary(geom = "text", fun.y = max, position = position_dodge(width = 0.75, 
+                  preserve = "total"), vjust = -1, size = 3.5, 
+                  label = c("bcd","cd","ab","d","a","d","abc","d","abcd","cd"))
+    #add group labels to plot
+print(TP.anova.plot)
 
 #8
+plot_grid(TN.anova.plot, TP.anova.plot + theme(legend.position = "none"), nrow = 2, 
+          align = 'v', rel_heights = c(1.25, 1))
+#combine two previous graphs into one cowplot with one legend and vertically aligned axes
 
 ```
 
