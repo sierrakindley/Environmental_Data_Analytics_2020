@@ -44,15 +44,18 @@ Let's say we wanted to predict total nitrogen concentrations by depth and by lak
 ```{r, fig.height = 3, fig.width = 4}
 # main effects
 TNancova.main <- lm(data = PeterPaul.chem.nutrients, tn_ug ~ lakename + depth)
-summary(TNancova.main)
+summary(TNancova.main) #intercept represents total nitrogen concentration in Paul Lake at 0m depth (intercept represents group listed first--Paul Lake in this case)
 
 # interaction effects
 TNancova.interaction <- lm(data = PeterPaul.chem.nutrients, tn_ug ~ lakename * depth)
-summary(TNancova.interaction)
+summary(TNancova.interaction) #intercept represents surface level in Paul Lake (again)
 
 TNplot <- ggplot(PeterPaul.chem.nutrients, aes(x = depth, y = tn_ug, color = lakename)) + 
   geom_point() + 
   geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Depth (m)", y = expression(TN ~ (mu*g / L)), color = "") +
+  #scale_color_brewer(palette = "Dark2") +
+  scale_color_manual(values = c("darkblue", "lightblue")) +
   xlim(0, 10)
 print(TNplot)
 
@@ -85,7 +88,7 @@ NTL.summertemp <-
   select(lakename:temperature_C) %>%
   #filter for Julian days in July and surface measurements
   filter(daynum > 181 & daynum < 213 & depth == 0 ) %>%
-  #code won't work if there are NAs
+  #code won't work if there are NAs--excludes all rows with NAs
   na.exclude()
 
 NTLtemps <-
@@ -100,7 +103,7 @@ Next, we will build a hierarchical model. We will use the package `nlme` for our
 
 ```{r}
 TempTest.mixed <- lme(data = NTL.summertemp,
-                     temperature_C ~ year4, 
+                     temperature_C ~ year4, #run temperature by year
                      random = ~1|lakename)
 summary(TempTest.mixed)
 rsquared(TempTest.mixed)
@@ -121,10 +124,10 @@ ggplot(NTL.summertemp, aes(x = year4, y = temperature_C, color = lakename)) +
   geom_abline(intercept = -97.72, slope = 0.06) +
   # make it look better
   labs(x = "", y = expression("Temperature " ( degree~C)), color = "") +
-  theme(legend.spacing.x = unit(0, "cm"))
+  theme(legend.spacing.x = unit(0, "cm")) #makes lake labels and color dots in legend a little closer together
 print(NTL.tempmodel)
 ```
 
 Question: How would you interpret the collective results of your mixed effects model in the context of the study question?
 
-> ANSWER: 
+> ANSWER: There is statistically significant change (increase) in surface temperature in northern Wisconsin lakes over time.
