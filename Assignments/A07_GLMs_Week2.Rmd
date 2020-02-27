@@ -31,7 +31,6 @@ getwd() #verify working directory
 library(tidyverse) #load tidyverse packages
 library(nlme) #load nlme package
 library(piecewiseSEM) #load piecewiseSEM package
-library(RColorBrewer) #load RColorBrewer package for plot colors
 LakeChemData.raw <- 
   read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
   #import the raw NTL-LTER lake chemistry/physics dataset
