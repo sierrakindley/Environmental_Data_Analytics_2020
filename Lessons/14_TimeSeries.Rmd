@@ -185,11 +185,11 @@ In general, detecting a monotonic trend requires a long sequence of data with fe
 
 Adjusting the data may be necessary to fulfill the assumptions of a trend test. These adjustments include **aggregation**, **subsampling**, and **interpolation**. What do each of these mean, and why might we want to use them?
 
-> aggregation: 
+> aggregation: Bundling data (from mulitple datasets) and then scaling it up; Might be useful when you have a lot of data
 
-> subsampling: 
+> subsampling: Taking a smaller sample of data from an existing dataset; Might be useful if there is a lot of data (could take a subsample that is representative of the larger dataset) 
 
-> interpolation: 
+> interpolation: Using existing data to predict/"fill in the gaps" where there are data missing
 
 Common interpolation methods: 
 
@@ -278,7 +278,7 @@ EnoDischarge.late.trend <- smk.test(EnoDischarge.late.monthly.ts)
 
 # Inspect results
 EnoDischarge.late.trend
-summary(EnoDischarge.late.trend)
+summary(EnoDischarge.late.trend) #no significant trend across months/"seasons" (p-value = 0.8889)
 
 EnoDischarge.monthly <-
 ggplot(EnoDischarge.late.monthly, aes(x = Date, y = Discharge)) +
@@ -289,7 +289,7 @@ print(EnoDischarge.monthly)
 
 What would we conclude based on these findings? 
 
->
+> There is no significant trend in mean discharge in the Eno River across months (SMK, p-value > 0.05, z = -0.13967). Mean discharge in the Eno River does not have a significant seasonal trend (SMK, p-value > 0.05, z = -0.13967).
  
 If a significant trend was present, we could compute a **Sen's Slope** to quantify that trend (`sens.slope` function in the trend package).
 
