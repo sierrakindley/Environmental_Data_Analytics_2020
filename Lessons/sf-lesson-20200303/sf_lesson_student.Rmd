@@ -279,9 +279,9 @@ I like to always save a copy of the raw data in my R session and rename all new 
 
 ```{r activity.load.data}
 # add your code here
-gages_raw <- 
-southeast_state_bounds_raw <- 
-my_tabular_data_raw <- 
+gages_raw <- st_read(here("data", "spatial_data", "gagesII_9322_sept30_2011.shp"))
+southeast_state_bounds_raw <- st_read(here("data", "spatial_data", "southeast_state_bounds.shp"))
+my_tabular_data_raw <- read.csv(here("data", "tabular_data", "conterm_climate.txt"))
 
 # red warning text is telling you how the data is being parsed
 ```
@@ -304,6 +304,11 @@ Use base R commands to answer the following questions (for basins_nf_seplains_ra
 ```{r activity.check.out.data}
 
 # add your code here
+class(basins_nf_seplains_raw) #class is 'sf' and 'data.frame'
+colnames(basins_nf_seplains_raw) #column names are 'AREA', 'PERIMETER', 'GAGE_ID', and 'geometry'
+length(names(basins_nf_seplains_raw)) #there are 4 columns
+attributes(basins_nf_seplains_raw)
+head(basins_nf_seplains_raw)
 
 # bonus, add your code here
 ```
@@ -325,6 +330,9 @@ Use st_crs() to look at the CRSs of the spatial data you have loaded up so far. 
 
 ```{r activity.check.out.data.again}
 # add your code here
+st_crs(basins_nf_seplains_raw)
+st_crs(gages_raw)
+st_crs(southeast_state_bounds_raw)
 
 # first two will not have EPSG code but have proj4 string (i.e., "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs")
 
@@ -371,10 +379,22 @@ Last, check the CRSs of each.
 ```{r activity.setting.projecting}
 # define proj4 string and EPSG code
 # add your code here
-my_proj4 <- 
-my_epsg <- 
+my_proj4 <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+my_epsg <- 5070
 
 # setting projections
+st_crs(basins_nf_seplains_raw) <- my_proj4
+st_crs(basins_nf_seplains_raw) <- my_epsg
+st_crs(basins_nf_seplains_raw) #verify to see if Coordinate Reference System and EPSG were changed to what was specified
+
+st_crs(gages_raw) <- my_proj4
+st_crs(gages_raw) <- my_epsg
+st_crs(gages_raw)
+
+st_crs(southeast_state_bounds_raw) <- my_proj4
+st_crs(southeast_state_bounds_raw) <- my_epsg
+st_crs(southeast_state_bounds_raw)
+
 # set the proj4 string first and then set the EPSG code (because proj4 will over-ride EPSG if you set EPSG first)
 # add your code here
 # basins
@@ -527,6 +547,9 @@ Bonus: What are some other spatial operations (or confirmations) that you could 
 ```{r activity.gages.select}
 # select a state, here I'm choosing North Carolina (NC)
 # add your code here
+NC_bounds <-
+  southeast_state_bounds %>%
+    select(NC)
 
 # check
 # add your code here
