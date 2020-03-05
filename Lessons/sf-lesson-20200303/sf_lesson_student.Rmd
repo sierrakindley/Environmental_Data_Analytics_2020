@@ -547,24 +547,35 @@ Bonus: What are some other spatial operations (or confirmations) that you could 
 ```{r activity.gages.select}
 # select a state, here I'm choosing North Carolina (NC)
 # add your code here
-NC_bounds <-
+NC_state_bounds_geom <-
   southeast_state_bounds %>%
-    select(NC)
+    filter(NAME == "North Carolina") %>%
+    st_geometry() #drops the attribute data
 
 # check
 # add your code here
+head(NC_state_bounds_geom)
 
 # select watersheds that intersect with NC bounds
 # add your code here
+NC_basins_nf_seplains <- basins_nf_seplains %>%
+  st_intersection(NC_state_bounds_geom)
 
 # check
 # add your code here
+head(NC_basins_nf_seplains)
 
 # select gages that fall within NC bounds
 # add your code here
+NC_gages <- gages %>%
+  st_intersection((NC_state_bounds_geom))
 
 # bonus
 # add your code here
+NC_area <- st_area(NC_state_bounds_geom) #find the area of NC
+NC_centroid <- st_centroid(NC_state_bounds_geom) #find centroid of NC
+NC_gages_buffer_100m <- st_buffer(NC_gages, dist = 100) #make a buffer around the stream gages in NC
+not_NC_gages <- st_difference(gages, NC_state_bounds_geom) #find stream gages not in NC
 ```
 
 It's really helpful to actually plot these results before moving forward with your work. That way you an make sure the sf commands are doing what you expect. We'll talk about plotting next...
@@ -581,7 +592,7 @@ Usually, I (Sheila) use RStudio to visualize all of my plots but since spatial d
 # basic plot
 pdf(here("outputs", "southeast_state_bounds.pdf"), width = 11, height = 8.5)
 ggplot() +
-  geom_sf(data = southeast_state_bounds) + # you can add color = "blue" to change outline color to blue or lwd = 2 to change the width of the lines
+  geom_sf(data = southeast_state_bounds) + # you can add color = "blue" to change outline color to blue or lwd = 2 to change the width of the lines; can add comma after data declaration and put 'aes()' to add aesthetics
   theme_bw() # add this to make the background white and not grey
 dev.off()
 
@@ -609,7 +620,10 @@ Let's check your operations from the 3.1.2 activity. You are trying for somethin
 ```{r activity.checking.operations}
 # plot NC watershed boundardies from 3.1.2
 pdf(here("outputs", "spatial_operations_test_fig.pdf"), width = 11, height = 8.5)
-# add your code here
+ggplot() +
+  geom_sf(data = NC_state_bounds_geom) + #this will be the base or bottom layer of the map; the first dataset listed will be the base or bottom   layer
+  geom_sf(data = NC_basins_nf_seplains, fill = "pink", alpha = 0.25) +
+  geom_sf(data = NC_gages, color = "black") 
 dev.off()
 ```
 
@@ -623,12 +637,12 @@ Basemaps are available to help you give more context to your maps. This is made 
 # select North Carolina (NC)
 nc_state_bounds_geom <- southeast_state_bounds %>%
   filter(NAME == "North Carolina") %>%
-  st_geometry()
+  st_geometry() #select just the geometry and drop the attribute data; helps mapping process go more quickly in R (they will load more    quickly)
 
 # get data bounding box
 nc_bbox <- nc_state_bounds_geom %>%
   st_buffer(dist = 150000) %>% # this value is very arbitrary just wanting to make a large buffer around geometry
-  st_transform(4326) %>% # WGS84 (for lat and long)
+  st_transform(4326) %>% # WGS84 (for lat and long); change data back to lat., long. because the basemap we want to use only likes lat., long.   format
   st_bbox()
 nc_bbox # check
 
