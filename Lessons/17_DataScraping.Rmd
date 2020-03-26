@@ -19,7 +19,7 @@ library(tidyverse)
 library(viridis)
 #install.packages("rvest")
 library(rvest)
-#install.packages("ggrepel")
+install.packages("ggrepel")
 library(ggrepel)
 
 # Set theme
@@ -131,7 +131,7 @@ str(Estuary)
 
 What is the relationship between estuary assessment and estuary impairment across the coastal states? 
 
->
+> Lower assessment --> people are likely going to assess the ones that are highly impaired first because they are of concern...if more estuaries are assessed, a lower percentage overall will likely be impaired
 
 I've added some code to adjust the default settings in ggplot. Uncomment lines to see what changes. Add your own comments as you work through the code, particularly for functions you haven't encountered before. 
 
@@ -143,32 +143,24 @@ Note: the fill aesthetic shows up gray for some states. Why?
 
 ggplot(Estuary, aes(x = Estuaries.Assessed.percent, y = Estuaries.Impaired.percent, 
                     fill = Estuaries.Impaired.percent.TMDL)) +
-  #
-  geom_point(shape = 21, size = 2, alpha = 0.8) 
-  #+ 
-  #
-  #scale_fill_viridis_c(option = "inferno", begin = 0.2, end = 0.9, direction = -1) +
-  # 
-  #geom_label_repel(aes(label = State), nudge_x = -5, nudge_y = -5, 
-  #                 size = 3, alpha = 0.8) +  
-  #
-  # labs(x = "% Estuaries Assessed (%)",
-  #      y = "% Estuaries Impaired (%)", 
-  #      fill = "% Impaired with TMDL")  
+  
+  geom_point(shape = 21, size = 2, alpha = 0.8) +
+  scale_fill_viridis_c(option = "inferno", begin = 0.2, end = 0.9, direction = -1) +
+   geom_label_repel(aes(label = State), nudge_x = -5, nudge_y = -5, 
+                   size = 3, alpha = 0.8) +  
+  labs(x = "% Estuaries Assessed (%)",
+        y = "% Estuaries Impaired (%)", 
+        fill = "% Impaired with TMDL")  
 
 ggplot(Estuary, aes(x = Estuaries.Assessed.mi2, y = Estuaries.Impaired.mi2, 
                     fill = Estuaries.Impaired.percent.TMDL)) +
-  geom_point(shape = 21, size = 2, alpha = 0.8) 
-  #+ 
-  #
-  # scale_fill_viridis_c(option = "inferno", begin = 0.2, end = 0.9, direction = -1) +
-  #
-  # geom_label_repel(data = subset(Estuary, State %in% c("Virginia", "Florida", "Louisiana", "Texas")), 
-  #            aes(label = State), nudge_x = -500, nudge_y = 200) +
-  #
-  # labs(x = expression("Estuary Area Assessed (mi"^"2"*")"),
-  #      y = expression("Estuary Area Impaired (mi"^"2"*")"), 
-  #      fill = "% Impaired with TMDL")
+  geom_point(shape = 21, size = 2, alpha = 0.8) +
+  scale_fill_viridis_c(option = "inferno", begin = 0.2, end = 0.9, direction = -1) +
+  geom_label_repel(data = subset(Estuary, State %in% c("Virginia", "Florida", "Louisiana", "Texas")), 
+              aes(label = State), nudge_x = -500, nudge_y = 200) +
+   labs(x = expression("Estuary Area Assessed (mi"^"2"*")"),
+        y = expression("Estuary Area Impaired (mi"^"2"*")"), 
+        fill = "% Impaired with TMDL")
 
 
 ```
