@@ -133,13 +133,13 @@ Lakes <- Lakes %>%
 
 # 8
 #Use str_replace to remove non-numeric characters
-Lakes$Lakes.Assessed.ac <- str_replace(Lakes$Lakes.Assessed.mi,
+Lakes$Lakes.Assessed.ac <- str_replace(Lakes$Lakes.Assessed.ac,
                                                       pattern = "([,])", replacement = "")  
 Lakes$Lakes.Assessed.percent <- str_replace(Lakes$Lakes.Assessed.percent,
                                                       pattern = "([%])", replacement = "")
 Lakes$Lakes.Assessed.percent <- str_replace(Lakes$Lakes.Assessed.percent,
                                                       pattern = "([*])", replacement = "")
-Lakes$Lakes.Impaired.ac <- str_replace(Lakes$Lakes.Impaired.mi,
+Lakes$Lakes.Impaired.ac <- str_replace(Lakes$Lakes.Impaired.ac,
                                                       pattern = "([,])", replacement = "")  
 Lakes$Lakes.Impaired.percent <- str_replace(Lakes$Lakes.Impaired.percent, 
                                                   pattern = "([%])", replacement = "")
